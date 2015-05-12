@@ -1,4 +1,4 @@
-# N-Body Simulation
+# Fractal
 
 <img src="http://appgallery.maxeler.com/v0.1/app/Fractal/icon" alt="N-Body">
 
