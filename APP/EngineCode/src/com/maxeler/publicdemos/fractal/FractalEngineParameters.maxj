@@ -1,0 +1,77 @@
+/*********************************************************************
+ * Maxeler Technologies: Fractal Demo                                *
+ *                                                                   *
+ * Version: 1.7                                                      *
+ * Date:    14 August 2013                                           *
+ *                                                                   *
+ * DFE code source file                                              *
+ *                                                                   *
+ *********************************************************************/
+
+package com.maxeler.publicdemos.fractal;
+
+import com.maxeler.maxcompiler.v2.build.EngineParameters;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEFix.SignMode;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEType;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFETypeFactory;
+
+public class FractalEngineParameters extends EngineParameters {
+	private static final String MPPRRetryThreshold   = "MPPRRetryThreshold";
+	private static final String streamFrequency      = "streamFrequency";
+	private static final String tag                  = "tag";
+	private static final String unrollFactor         = "unrollFactor";
+	private static final String computeType          = "computeType";
+
+	public FractalEngineParameters(String[] args) {
+		super(args);
+	}
+
+	public FractalEngineParameters(String[] args, String... staticOverrides) {
+		super(args, staticOverrides);
+	}
+
+	public String getTag() {
+		return getParam(tag);
+	}
+
+	public int getStreamFrequency() {
+		return getParam(streamFrequency);
+	}
+
+	public int getUnrollFactor() {
+		return getParam(unrollFactor);
+	}
+
+	public DFEType getComputeType() {
+		return getParam(computeType);
+	}
+
+	@Override
+	protected void declarations() {
+		declareParam(MPPRRetryThreshold, DataType.INT, 500);
+		declareParam(tag, DataType.STRING, "");
+
+		declareParam(streamFrequency, DataType.INT, 210);
+		declareParam(unrollFactor, DataType.INT, 96);
+		// declareParam(computeType, DataType.DFEFIXMAX, DFETypeFactory.dfeFixMax(35, 1024.0, SignMode.TWOSCOMPLEMENT));
+		declareParam(computeType, DataType.DFEFIXOFFSET, DFETypeFactory.dfeFixOffset(35, -24, SignMode.TWOSCOMPLEMENT));
+	}
+
+	private String getUnderscoreTag() {
+		String tag = getTag();
+		if (tag == null || tag.length() == 0)
+			return "";
+		else
+			return "_" + tag;
+	}
+
+	@Override
+	public String getBuildName() {
+		return String.format("%s_%s_%s_%dU_%dMHz%s",
+				getMaxFileName(),
+				getDFEModel().toString(),
+				getTarget().toString(),
+				getUnrollFactor(), getStreamFrequency(),
+				getUnderscoreTag());
+	}
+}

@@ -1,0 +1,5 @@
+#
+# This file is managed by MaxIDE. Do NOT change.
+#
+HEADERS:= cmdline.h maxapp.h 
+SOURCES:= cmdline.c gui.cpp maxapp.cpp nongui.cpp 

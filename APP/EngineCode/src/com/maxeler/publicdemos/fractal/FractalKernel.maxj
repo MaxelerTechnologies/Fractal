@@ -1,0 +1,195 @@
+/*********************************************************************
+ * Maxeler Technologies: Fractal Demo                                *
+ *                                                                   *
+ * Version: 1.7                                                      *
+ * Date:    14 August 2013                                           *
+ *                                                                   *
+ * DFE code source file                                              *
+ *                                                                   *
+ *********************************************************************/
+
+package com.maxeler.publicdemos.fractal;
+
+import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;
+import com.maxeler.maxcompiler.v2.kernelcompiler.KernelParameters;
+import com.maxeler.maxcompiler.v2.kernelcompiler.stdlib.core.CounterChain;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEFix.SignMode;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEFloat;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEType;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEVar;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.composite.DFEComplex;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.composite.DFEComplexType;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.composite.DFEVector;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.composite.DFEVectorType;
+
+/**
+ * Hardware implementation of the Julia/Mandelbrot fractal computation.
+ *
+ */
+public class FractalKernel extends Kernel {
+
+	static public final String SC_LOG_WIDTH_IN_PIXELS = "log_width_in_pixels";
+	static public final String SC_WIDTH_IN_PIXELS     = "width_in_pixels";
+	static public final String SC_SIZE_IN_PIXELS      = "size_in_pixels";
+	static public final String SC_MAX_ITERATIONS      = "max_iterations";
+	static public final String SC_C_REAL              = "c_real";
+	static public final String SC_C_IMAG              = "c_imag";
+	static public final String SC_USE_Z0              = "use_z0";
+	static public final String IN_DATA                = "input";
+	static public final String OUT_DATA               = "output";
+
+	/**
+	 * This kernel takes the following scalar inputs:
+	 * 		log_width_in_pixels		// log2 of width of computed picture
+	 *		width_in_pixels			// this should be (1 << log_width_in_pixels)
+	 *		size_in_pixels			// width * height of computed picture
+	 *		max_iterations			// this should be between 1 and 256 inclusive
+	 *
+	 * The scalar input size_in_pixels should be divided exactly by width_in_pixels, and be divided
+	 * exactly by unrollFactor*latency, where latency is 32 if compute_type is a float, and 16
+	 * otherwise.
+	 * The scalar input max_iterations should be divided exactly by unroll_factor.
+	 *
+	 * Beware, the compute type should be large enough so that both the (height-1) and the (width-1)
+	 * could be cast to it. With a width of 1024, and a fix point signed compute type, you need
+	 * at least 11 bits for the integer part.
+	 *
+	 * @param parameters
+	 * @param unrollFactor
+	 * @param compute_type
+	 */
+	public FractalKernel(KernelParameters kernelParams, FractalEngineParameters params) {
+		super(kernelParams);
+
+		int unrollFactor = params.getUnrollFactor();
+		DFEType computeType = params.getComputeType();
+
+		if (unrollFactor <= 0 || unrollFactor > 256) {
+			throw new IllegalArgumentException("unrollFactor should be in the range 1..256");
+		}
+		final DFEComplexType cplx_type = new DFEComplexType(computeType);
+		final DFEType input_type = computeType instanceof DFEFloat ? dfeFloat(8,24) : dfeFixMax(29, 8.0, SignMode.TWOSCOMPLEMENT);
+		final DFEVectorType<DFEVar> array_type = new DFEVectorType<DFEVar>(input_type, 4);
+
+		int latency = 0;
+		if (computeType instanceof DFEFloat) latency = 32;
+		else latency = 16;
+		int cslowFactor = latency * unrollFactor;
+
+		DFEVar log_width_in_pixels = io.scalarInput(SC_LOG_WIDTH_IN_PIXELS, dfeUInt(4));	// max width is 2^15, which is big enough
+		DFEVar width_in_pixels = io.scalarInput(SC_WIDTH_IN_PIXELS, dfeUInt(32));
+		DFEVar size_in_pixels = io.scalarInput(SC_SIZE_IN_PIXELS, dfeUInt(32));
+		DFEVar max_iterations = io.scalarInput(SC_MAX_ITERATIONS, dfeUInt(32));
+		DFEVar c_real = io.scalarInput(SC_C_REAL, input_type);
+		DFEVar c_imag = io.scalarInput(SC_C_IMAG, input_type);
+		DFEVar use_z0 = io.scalarInput(SC_USE_Z0, dfeBool());
+
+		//c_real.watch("cin_real");
+		//c_imag.watch("cin_imag");
+		//use_z0.watch("use_z0");
+
+		//log_width_in_pixels.watch("log_width");
+		//width_in_pixels.watch("width");
+		//size_in_pixels.watch("size");
+		//max_iterations.watch("max_it");
+
+		CounterChain chain = control.count.makeCounterChainMoreBits();
+		DFEVar kkCounter = chain.addCounter(size_in_pixels, cslowFactor);
+		DFEVar itCounter = chain.addCounter(max_iterations, unrollFactor);
+		DFEVar kCounter = chain.addCounter(cslowFactor, 1);
+
+		DFEVar k = kCounter.cast(kkCounter.getType()) + kkCounter;
+		// j*width+i = k
+		DFEVar iCounter =  k & (width_in_pixels-1);
+		DFEVar jCounter =  k >> log_width_in_pixels;
+
+		//kkCounter.watch("kkCounter");
+		//itCounter.watch("itCounter");
+		//kCounter.watch("kCounter");
+		//iCounter.watch("iCounter");
+		//jCounter.watch("jCounter");
+
+		kkCounter.setReportOnUnused(false);
+		kCounter.setReportOnUnused(false);
+
+		DFEVar zero = constant.var(0);
+		DFEVar isItZero = itCounter.eq(zero);
+		DFEVar isItMax = itCounter.eq(max_iterations-unrollFactor);
+
+		DFEVar isStart = k.eq(zero) & itCounter.eq(zero);
+
+		final DFEType io_in_type = dfeFloat(11,53);
+		final DFEVectorType<DFEVar> io_in_array_type = new DFEVectorType<DFEVar>(io_in_type, 4);
+
+		DFEVector<DFEVar> input = io.input(IN_DATA, io_in_array_type, isStart).cast(array_type);
+		DFEVar xstart = (input[0]).cast(computeType);
+		DFEVar ystart = (input[1]).cast(computeType);
+		DFEVar deltax = (input[2]).cast(computeType);
+		DFEVar deltay = (input[3]).cast(computeType);
+
+		//xstart.watch("xstart");
+		//ystart.watch("ystart");
+		//deltax.watch("deltax");
+		//deltay.watch("deltay");
+
+		// calculate initial iterates from i and j
+		DFEComplex z0 = DFEComplexType.newInstance(this,
+				xstart + iCounter.cast(computeType)*deltax,
+				ystart + jCounter.cast(computeType)*deltay);
+
+		DFEVar finishIt = constant.var(dfeUInt(16), 0);
+		DFEVar finished = constant.var(dfeBool(), 0);
+
+		DFEComplex carried_z0 = cplx_type.newInstance(this);	// forward references for loop
+		DFEComplex carried_z = cplx_type.newInstance(this);
+		DFEVar carried_finished = dfeBool().newInstance(this);
+		DFEVar carried_finishIt = dfeUInt(16).newInstance(this);
+
+		// At the head of the loop we have a multiplexer to choose between the
+		// initial value, and the new value passed along the backward edge:
+		z0 = isItZero ? z0 : carried_z0;
+		DFEComplex z = isItZero ? z0 : carried_z;
+		finished = isItZero ? finished : carried_finished;
+		finishIt = isItZero ? finishIt : carried_finishIt;
+
+		// To get multiple outputs from a method we create sourceless variables and connect them
+		// in that method.
+		DFEComplex new_z = cplx_type.newInstance(this);
+		DFEVar new_finished = dfeBool().newInstance(this);
+		DFEVar new_finishIt = dfeUInt(16).newInstance(this);
+
+		DFEComplex c = use_z0 ? z0 : DFEComplexType.newInstance(this, c_real.cast(computeType), c_imag.cast(computeType));
+
+		//optimization.pushSquashFactor(0.1);
+		for (int it = 0; it < unrollFactor; it++) {
+			DFEVar abs_sq = z.getReal()*z.getReal() + z.getImaginary()*z.getImaginary();
+
+			DFEVar condition = abs_sq > constant.var(4.0);
+			finished = finished ? finished : condition;
+
+			//z.watch("z_" + it);
+			//finishIt.watch("finishIt_" + it);
+
+			//c.watch("c");
+			z = z*z + c;
+
+			finishIt = finished ? finishIt : (finishIt + constant.var(1));
+		}
+
+		//finishIt.watch("finishIt_" + unrollFactor);
+		//z.watch("z_" + unrollFactor);
+
+		new_z.connect(z);
+		new_finished.connect(finished);
+		new_finishIt.connect(finishIt);
+
+		// Now connect the cycle's backward edges:
+		carried_z0.connect(stream.offset(z0, -cslowFactor));
+		carried_z.connect(stream.offset(new_z, -cslowFactor));
+		carried_finished.connect(stream.offset(new_finished, -cslowFactor));
+		carried_finishIt.connect(stream.offset(new_finishIt, -cslowFactor));
+
+		// Output
+		io.output(OUT_DATA, new_finishIt, dfeUInt(16), isItMax);
+	}
+}

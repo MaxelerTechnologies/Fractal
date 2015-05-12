@@ -1,0 +1,135 @@
+Apache Ant version 1.6.0 compiled on December 18 2003
+Buildfile: Fractal.xml
+Detected Java version: 1.4 in: /network-raid/opt/jdk1.6.0_02/jre
+Detected OS: Linux
+parsing buildfile /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal.xml with URI = file:///home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal.xml
+Project base dir set to: /home/imilankovic/Fractal_1_7/project/EngineCode
+ [property] Loading Environment env.
+Property ${-*-command-variables-*-} has not been set
+Property ${env.MAXCOMPILERJCP} has not been set
+Build sequence for target `run' is [build, run]
+Complete build sequence is [build, run, help, runresult, clean, all, jar, ]
+
+build:
+      [ant] calling target [default] in build file /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal_Build.xml
+parsing buildfile /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal_Build.xml with URI = file:///home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal_Build.xml
+Project base dir set to: /home/imilankovic/Fractal_1_7/project/EngineCode
+ [property] Loading Environment env.
+Property ${-*-command-variables-*-} has not been set
+Property ${env.MAXCOMPILERJCP} has not been set
+      [ant] Entering /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal_Build.xml...
+Build sequence for target `all' is [clean, build, all]
+Complete build sequence is [clean, build, all, ]
+
+clean:
+
+build:
+    [mkdir] Created dir: /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/dist
+    [mkdir] Created dir: /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/dist/bin
+
+
+[maxjcompiler] Compiling to folder /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/dist/bin
+
+[maxjcompiler] Compiling files and folders:
+[maxjcompiler] /home/imilankovic/Fractal_1_7/project/EngineCode/src
+
+[maxjcompiler] Compiler options:
+[maxjcompiler] -noExit
+[maxjcompiler] -classpath
+[maxjcompiler] /network-raid/opt/maxcompiler-2015.1-post-ikon-merge/lib/MaxCompiler.jar:/network-raid/opt/maxq/maxq-ctl.jar:/network-raid/opt/maxq2/maxq2-latest/maxq2.jar:/network-raid/opt/antlr-3.3/antlr-3.3-complete.jar
+[maxjcompiler] -d
+[maxjcompiler] /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/dist/bin
+
+all:
+      [ant] Exiting /home/imilankovic/Fractal_1_7/project/RunRules/Vectis/Fractal_Build.xml.
+
+run:
+     [java] Executing '/network-raid/opt/jdk1.6.0_02/jre/bin/java' with arguments:
+     [java] '-Xmx2048m'
+     [java] '-classpath'
+     [java] '/network-raid/opt/maxq/maxq-ctl.jar:/home/imilankovic/Fractal_1_7/project/RunRules/Vectis/dist/bin:/network-raid/opt/maxcompiler-2015.1-post-ikon-merge/lib/MaxCompiler.jar:/network-raid/opt/maxq2/maxq2-latest/maxq2.jar:/network-raid/opt/antlr-3.3/antlr-3.3-complete.jar'
+     [java] 'com.maxeler.publicdemos.fractal.FractalManager'
+     [java] 
+     [java] The ' characters around the executable and arguments are
+     [java] not part of the command.
+     [java] Setting environment variable: MAXSOURCEDIRS=src
+     [java] Thu 12:53: MaxCompiler version: 2014.2a
+     [java] Thu 12:53: Build "Fractal" start time: Thu May 07 12:53:00 BST 2015
+     [java] Thu 12:53: Main build process running as user imilankovic on host altocumulus02.cluster.maxeler.com
+     [java] Thu 12:53: Build location: /home/imilankovic/builds/07-05-15/Fractal_VECTIS_DFE_96U_210MHz
+     [java] Thu 12:53: Detailed build log available in "_build.log"
+     [java] Thu 12:53: 
+     [java] Thu 12:53: ENGINE BUILD PARAMETERS
+     [java] Thu 12:53: 	        Build name: Fractal_VECTIS_DFE_96U_210MHz 
+     [java] Thu 12:53: 	          DFEModel: VECTIS                        
+     [java] Thu 12:53: 	       maxFileName: Fractal                       
+     [java] Thu 12:53: 	            target: DFE                           
+     [java] Thu 12:53: 	        enableMPCX: false                         
+     [java] Thu 12:53: 	       MPPRStartCT: 1                             
+     [java] Thu 12:53: 	         MPPREndCT: 8                             
+     [java] Thu 12:53: 	       MPPRThreads: 2                             
+     [java] Thu 12:53: 	MPPRRetryThreshold: 500                           
+     [java] Thu 12:53: 	               tag:                               
+     [java] Thu 12:53: 	   streamFrequency: 210                           
+     [java] Thu 12:53: 	      unrollFactor: 96                            
+     [java] Thu 12:53: 	       computeType: dfeFix(11, 24, TWOSCOMPLEMENT)
+     [java] Thu 12:53: Instantiating kernel "FractalKernel"
+     [java] Thu 12:53: WARNING: Floating-point casts ignore set rounding mode and use TONEAREVEN rounding only.
+     [java] Thu 12:53: 
+     [java] Thu 12:53: Compiling kernel "FractalKernel"
+     [java] Thu 12:53: Generating input files (VHDL, netlists, MegaWizard/CoreGen)
+     [java] Thu 12:55: Running back-end  build (12 phases)
+     [java] Thu 12:55: (1/12) - Prepare MaxFile Data (GenerateMaxFileDataFile)
+     [java] Thu 12:55: (2/12) - Synthesize DFE Modules (XST)
+     [java] Thu 13:01: (3/12) - Link DFE Modules (NGCBuild)
+     [java] Thu 13:02: (4/12) - Prepare for Resource Analysis (EDIF2MxruBuildPass)
+     [java] Thu 13:02: (5/12) - Generate Preliminary Annotated Source Code (PreliminaryResourceAnnotationBuildPass)
+     [java] Thu 13:02: (6/12) - Report Resource Usage (XilinxPreliminaryResourceSummary)
+     [java] Thu 13:02: 
+     [java] Thu 13:02: PRELIMINARY RESOURCE USAGE
+     [java] Thu 13:02: Logic utilization:      84407 / 297600 (28.36%)
+     [java] Thu 13:02:   LUTs:                 53950 / 297600 (18.13%)
+     [java] Thu 13:02:   Primary FFs:          71060 / 297600 (23.88%)
+     [java] Thu 13:02: Multipliers (25x18):     1160 / 2016   (57.54%)
+     [java] Thu 13:02:   DSP blocks:            1160 / 2016   (57.54%)
+     [java] Thu 13:02: Block memory (BRAM18):     41 / 2128   (1.93%)
+     [java] Thu 13:02: 
+     [java] Thu 13:02: About to start chip vendor Map/Place/Route toolflow. This will take some time.
+     [java] Thu 13:02: For this compile, we estimate this process may take longer than 1 hour.
+     [java] Thu 13:02: We recommend running in simulation to verify correctness before building a DFE configuration.
+     [java] Thu 13:02: 
+     [java] Thu 13:02: (7/12) - Prepare for Placement (NGDBuild)
+     [java] Thu 13:06: (8/12) - Place and Route DFE (XilinxMPPR)
+     [java] Thu 13:06: Executing MPPR with 8 cost tables and 2 threads.
+     [java] Thu 13:06: MPPR: Starting 8 cost tables
+     [java] Thu 13:53: MPPR: Cost table 2 met timing with score 0 (best score 0)
+     [java] Thu 13:53: (9/12) - Prepare for Resource Analysis (XDLBuild)
+     [java] Thu 13:55: (10/12) - Generate Resource Report (XilinxResourceUsageBuildPass)
+     [java] Thu 13:55: (11/12) - Generate Annotated Source Code (XilinxResourceAnnotationBuildPass)
+     [java] Thu 13:55: (12/12) - Generate MaxFile (GenerateMaxFileXilinx)
+     [java] Thu 14:01: 
+     [java] Thu 14:01: FINAL RESOURCE USAGE
+     [java] Thu 14:01: Logic utilization:      59199 / 297600 (19.89%)
+     [java] Thu 14:01:   LUTs:                 46497 / 297600 (15.62%)
+     [java] Thu 14:01:   Primary FFs:          56576 / 297600 (19.01%)
+     [java] Thu 14:01:   Secondary FFs:         7419 / 297600 (2.49%)
+     [java] Thu 14:01: Multipliers (25x18):     1160 / 2016   (57.54%)
+     [java] Thu 14:01:   DSP blocks:            1160 / 2016   (57.54%)
+     [java] Thu 14:01: Block memory (BRAM18):     43 / 2128   (2.02%)
+     [java] Thu 14:01: 
+     [java] Thu 14:01: MaxFile: /home/imilankovic/builds/07-05-15/Fractal_VECTIS_DFE_96U_210MHz/results/Fractal.max (MD5Sum: a0e4df44bc6a8e7cc4e983d8634e36f9)
+     [java] Thu 14:01: Build completed: Thu May 07 14:01:27 BST 2015 (took 1 hour, 8 mins, 27 secs)
+
+
+     [exec] Current OS is Linux
+     [exec] Executing '/network-raid/opt/maxcompiler-2015.1-post-ikon-merge/lib/MaxIDE/copyBuildResults.sh' with arguments:
+     [exec] '-p'
+     [exec] 'Vectis'
+     [exec] 
+     [exec] The ' characters around the executable and arguments are
+     [exec] not part of the command.
+
+
+
+BUILD SUCCESSFUL
+Total time: 68 minutes 34 seconds

@@ -1,0 +1,90 @@
+/*********************************************************************
+ * Maxeler Technologies: Fractal Demo                                *
+ *                                                                   *
+ * Version: 1.7                                                      *
+ * Date:    14 August 2013                                           *
+ *                                                                   *
+ * DFE code source file                                              *
+ *                                                                   *
+ *********************************************************************/
+
+package com.maxeler.publicdemos.fractal;
+
+import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;
+import com.maxeler.maxcompiler.v2.managers.BuildConfig;
+import com.maxeler.maxcompiler.v2.managers.custom.CustomManager;
+import com.maxeler.maxcompiler.v2.managers.custom.blocks.KernelBlock;
+import com.maxeler.maxcompiler.v2.managers.engine_interfaces.CPUTypes;
+import com.maxeler.maxcompiler.v2.managers.engine_interfaces.EngineInterface;
+import com.maxeler.maxcompiler.v2.managers.engine_interfaces.InterfaceParam;
+
+public class FractalManager extends CustomManager {
+
+	private static final String s_kernelName = "FractalKernel";
+	private final FractalEngineParameters params;
+
+	public static void main(String[] args) {
+		FractalEngineParameters params = new FractalEngineParameters(args);
+		FractalManager manager = new FractalManager(params);
+
+		manager.build();
+	}
+
+	public FractalManager(final FractalEngineParameters params) {
+		super(params);
+
+		this.params = params;
+
+		setConfiguration();
+		setDesign();
+		createSLiCinterface(interfaceDefault());
+	}
+
+	private void setDesign() {
+		Kernel kernel = new FractalKernel(
+				makeKernelParameters(s_kernelName),
+				params);
+		KernelBlock block = addKernel(kernel);
+
+		addMaxFileConstant("UNROLL_FACTOR", params.getUnrollFactor());
+
+		block.getInput(FractalKernel.IN_DATA)  <== addStreamFromCPU(FractalKernel.IN_DATA);
+		addStreamToCPU(FractalKernel.OUT_DATA) <== block.getOutput(FractalKernel.OUT_DATA);
+	}
+
+	private EngineInterface interfaceDefault() {
+		EngineInterface engine_interface = new EngineInterface();
+
+		InterfaceParam log_width_in_pixels = engine_interface.addParam(FractalKernel.SC_LOG_WIDTH_IN_PIXELS, CPUTypes.UINT8);
+		InterfaceParam width_in_pixels     = engine_interface.addParam(FractalKernel.SC_WIDTH_IN_PIXELS,     CPUTypes.UINT32);
+		InterfaceParam size_in_pixels      = engine_interface.addParam(FractalKernel.SC_SIZE_IN_PIXELS,      CPUTypes.UINT32);
+		InterfaceParam max_iterations      = engine_interface.addParam(FractalKernel.SC_MAX_ITERATIONS,      CPUTypes.UINT32);
+		InterfaceParam c_real              = engine_interface.addParam(FractalKernel.SC_C_REAL,              CPUTypes.DOUBLE);
+		InterfaceParam c_imag              = engine_interface.addParam(FractalKernel.SC_C_IMAG,              CPUTypes.DOUBLE);
+		InterfaceParam use_z0              = engine_interface.addParam(FractalKernel.SC_USE_Z0,              CPUTypes.UINT8);
+
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_LOG_WIDTH_IN_PIXELS, log_width_in_pixels);
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_WIDTH_IN_PIXELS,     width_in_pixels    );
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_SIZE_IN_PIXELS,      size_in_pixels     );
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_MAX_ITERATIONS,      max_iterations     );
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_C_REAL,              c_real             );
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_C_IMAG,              c_imag             );
+		engine_interface.setScalar(s_kernelName, FractalKernel.SC_USE_Z0,              use_z0             );
+
+		engine_interface.setStream(FractalKernel.IN_DATA, CPUTypes.DOUBLE, 4*CPUTypes.DOUBLE.sizeInBytes());
+		engine_interface.setStream(FractalKernel.OUT_DATA, CPUTypes.UINT16, size_in_pixels*CPUTypes.UINT16.sizeInBytes());
+
+		engine_interface.setTicks(s_kernelName, (size_in_pixels*max_iterations) / params.getUnrollFactor());
+
+		return engine_interface;
+	}
+
+	private void setConfiguration() {
+		BuildConfig buildConfig = getBuildConfig();
+		buildConfig.setMPPRCostTableSearchRange(params.getMPPRStartCT(), params.getMPPREndCT());
+		buildConfig.setMPPRParallelism(params.getMPPRThreads());
+		buildConfig.setMPPRRetryNearMissesThreshold(params.getMPPRRetryThreshold());
+
+		config.setDefaultStreamClockFrequency(params.getStreamFrequency());
+	}
+}
