@@ -1,6 +1,6 @@
 # Fractal
 
-<img src="http://appgallery.maxeler.com/v0.1/app/Fractal/icon" alt="N-Body">
+<img src="http://appgallery.maxeler.com/v0.1/app/Fractal/icon" alt="Fractal">
 
 ## Description
 
