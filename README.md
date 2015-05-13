@@ -49,5 +49,5 @@ Removes results of compilation from build directories
 
 Removes all results of comakempilation from build directories, including all maxfiles
 
-Brain Network on [AppGallery](http://appgallery.maxeler.com/)   
+Fractal on [AppGallery](http://appgallery.maxeler.com/)   
 
