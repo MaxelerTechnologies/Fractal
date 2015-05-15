@@ -1,0 +1,48 @@
+Thu 17:35: ########################################## 
+Thu 17:35: Compiling.
+Thu 17:35: ########################################## 
+
+Thu 17:35: MaxCompiler version: 2014.2.
+Thu 17:35: Build Vectis run rule for Fractal start time: Thu May 14 17:35:01 BST 2015.
+Thu 17:35: Project location: /home/imilankovic/workspace/GIT/Fractal.
+Thu 17:35: Detailed build log: /home/imilankovic/workspace/GIT/Fractal/RunRules/Vectis/build.log.
+
+Thu 17:35: Compiling Engine Code.
+Thu 17:35: Building Fractal.max file. 
+Thu 17:35: Setting environment variable:
+Thu 17:35: MAXCOMPILER_BUILD_DIR : /network-scratch/imilankovic/maxdc_builds/
+Thu 17:35: MAX_BUILDPARAMS : DFEModel='VECTIS' target='DFE' maxFileName='Fractal' streamFrequency='210' unrollFactor='96' MPPRStartCT='1' MPPREndCT='8' MPPRThreads='2'  
+Thu 17:35: Building output:
+Thu 17:35: MaxCompiler version: 2014.2
+Thu 17:35: Build "Fractal" start time: Thu May 14 17:35:05 BST 2015
+Thu 17:35: Main build process running as user imilankovic on host nxws17.office.maxeler.com
+Thu 17:35: Build location: /home/imilankovic/builds/14-05-15/Fractal_VECTIS_DFE_96U_210MHz
+Thu 17:35: Detailed build log available in "_build.log"
+Thu 17:35: 
+Thu 17:35: ENGINE BUILD PARAMETERS
+Thu 17:35: 	        Build name: Fractal_VECTIS_DFE_96U_210MHz 
+Thu 17:35: 	          DFEModel: VECTIS                        
+Thu 17:35: 	       maxFileName: Fractal                       
+Thu 17:35: 	            target: DFE                           
+Thu 17:35: 	        enableMPCX: false                         
+Thu 17:35: 	       MPPRStartCT: 1                             
+Thu 17:35: 	         MPPREndCT: 8                             
+Thu 17:35: 	       MPPRThreads: 2                             
+Thu 17:35: 	MPPRRetryThreshold: 500                           
+Thu 17:35: 	               tag:                               
+Thu 17:35: 	   streamFrequency: 210                           
+Thu 17:35: 	      unrollFactor: 96                            
+Thu 17:35: 	       computeType: dfeFix(11, 24, TWOSCOMPLEMENT)
+Thu 17:35: Instantiating kernel "FractalKernel"
+Thu 17:35: WARNING: Floating-point casts ignore set rounding mode and use TONEAREVEN rounding only.
+Thu 17:35: 
+Thu 17:35: Compiling kernel "FractalKernel"
+Thu 17:35: Generating input files (VHDL, netlists, MegaWizard/CoreGen)
+Thu 17:36: Running back-end  build (12 phases)
+Thu 17:36: (1/12) - Prepare MaxFile Data (GenerateMaxFileDataFile)
+Thu 17:36: (2/12) - Synthesize DFE Modules (XST)
+Thu 17:36: Engine build terminated by user.
+Thu 17:36: Engine build terminated by user
+Thu 17:36: Build failed: Thu May 14 17:36:20 BST 2015
+
+

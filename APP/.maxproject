@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maxCompilerManager>
-<enginePart internalEngineSubproject="fractal_EngineCode" isSrcBin="false" isUseDefaultSelected="false" outputLocation="/fractal_EngineCode/bin" projectName="fractal"/>
-<cpuPart internalCpuSubproject="fractal_CPUCode"/>
+<maxCompilerManager version="2">
+<enginePart internalEngineSubproject="Fractal_EngineCode" isSrcBin="false" isUseDefaultSelected="false" outputLocation="/Fractal_EngineCode/bin" projectName="Fractal"/>
+<cpuPart internalCpuSubproject="Fractal_CPUCode"/>
 <watchedFiles/>
 </maxCompilerManager>

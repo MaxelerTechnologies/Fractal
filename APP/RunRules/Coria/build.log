@@ -1,0 +1,44 @@
+Thu 17:36: ########################################## 
+Thu 17:36: Compiling.
+Thu 17:36: ########################################## 
+
+Thu 17:36: MaxCompiler version: 2014.2.
+Thu 17:36: Build Coria run rule for Fractal start time: Thu May 14 17:36:54 BST 2015.
+Thu 17:36: Project location: /home/imilankovic/workspace/GIT/Fractal.
+Thu 17:36: Detailed build log: /home/imilankovic/workspace/GIT/Fractal/RunRules/Coria/build.log.
+
+Thu 17:36: Compiling Engine Code.
+Thu 17:36: Building Fractal.max file. 
+Thu 17:36: Setting environment variable:
+Thu 17:36: MAXCOMPILER_BUILD_DIR : /network-scratch/imilankovic/maxdc_builds/
+Thu 17:36: MAX_BUILDPARAMS : DFEModel='CORIA' target='DFE' maxFileName='Fractal' streamFrequency='300'  
+Thu 17:36: Building output:
+Thu 17:36: MaxCompiler version: 2014.2
+Thu 17:36: Build "Fractal" start time: Thu May 14 17:36:58 BST 2015
+Thu 17:36: Main build process running as user imilankovic on host nxws17.office.maxeler.com
+Thu 17:36: Build location: /home/imilankovic/builds/14-05-15/Fractal_CORIA_DFE_96U_300MHz
+Thu 17:36: Detailed build log available in "_build.log"
+Thu 17:36: 
+Thu 17:36: ENGINE BUILD PARAMETERS
+Thu 17:36: 	        Build name: Fractal_CORIA_DFE_96U_300MHz  
+Thu 17:36: 	          DFEModel: CORIA                         
+Thu 17:36: 	       maxFileName: Fractal                       
+Thu 17:36: 	            target: DFE                           
+Thu 17:36: 	        enableMPCX: false                         
+Thu 17:36: 	       MPPRStartCT: 1                             
+Thu 17:36: 	         MPPREndCT: 1                             
+Thu 17:36: 	       MPPRThreads: 1                             
+Thu 17:36: 	MPPRRetryThreshold: 500                           
+Thu 17:36: 	               tag:                               
+Thu 17:36: 	   streamFrequency: 300                           
+Thu 17:36: 	      unrollFactor: 96                            
+Thu 17:36: 	       computeType: dfeFix(11, 24, TWOSCOMPLEMENT)
+Thu 17:36: Instantiating kernel "FractalKernel"
+Thu 17:36: WARNING: Floating-point casts ignore set rounding mode and use TONEAREVEN rounding only.
+Thu 17:37: 
+Thu 17:37: Compiling kernel "FractalKernel"
+Thu 17:37: Engine build terminated by user.
+Thu 17:37: Engine build terminated by user
+Thu 17:37: Build failed: Thu May 14 17:37:04 BST 2015
+
+
