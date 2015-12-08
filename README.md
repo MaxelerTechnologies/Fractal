@@ -23,6 +23,8 @@ License of the project.
 
 ## Information to compile
 
+`wxGTK-devel` library needs to be installed.
+
 Ensure the environment variables below are correctly set:
   * `MAXELEROSDIR`
   * `MAXCOMPILERDIR`
