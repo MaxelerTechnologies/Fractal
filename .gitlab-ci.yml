@@ -10,7 +10,7 @@ stages:
 - make-sim
 - make-dfe
 
-before-script:
+before_script:
   - yum install -y wxGTK-devel
 
 make-sim-Fractal:
